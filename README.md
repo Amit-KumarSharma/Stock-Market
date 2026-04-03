@@ -1,16 +1,46 @@
-# React + Vite
+# Amit's Advisory - Premium Stock Market Signals
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack, modern fintech web application designed to securely manage subscriptions, display real-time trading calls, and process seamless zero-commission payments. 
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Freemium Dashboard:** Active trading calls dynamically blur for unpaid users ("Premium Calls Locked") with a sleek glassmorphism overlay.
+- **Serverless Payment Backend:** Fully integrated with the S2S PhonePe API using highly secure Vercel Serverless Functions (`/api/*`) for cryptographic `SHA-256` hashing and processing to bypass middleman commissions.
+- **Real-Time Database Sync:** Data pulled directly from Firebase Firestore allows users to receive new stock entries milliseconds after they are generated without ever refreshing the page.
+- **Live Performance Matrix:** An algorithmic calculation tab that tracks total calls, hit rates, and raw mathematical accuracy percentages based on historical signals.
+- **Dynamic Admin Panel:** Fully secured, role-checked route (`role === 'admin'`) allowing instant creation, modification, and pricing changes to Subscription Tiers and Trade Calls that instantly push to client screens.
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend:** React, Vite, Tailwind CSS (Glassmorphism design schema)
+- **Backend:** Vercel Serverless (Node.js) API layer for Cryptographic Hashing
+- **Database / Auth:** Google Firebase (Firestore, Authentication)
+- **Payment Gateway:** PhonePe 
+- **Animations:** React Three Fiber, Framer Motion
 
-## Expanding the ESLint configuration
+## Installation & Setup
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. **Clone Repo:**
+   ```bash
+   git clone https://github.com/Amit-KumarSharma/Stock-Market.git
+   ```
+2. **Install Dependencies:**
+   ```bash
+   npm install
+   ```
+3. **Environment Tokens:**
+   Drop a `.env` file into the root directory mapping to your Firebase Instance and PhonePe Sandbox API Keys:
+   ```env
+   VITE_FIREBASE_API_KEY="..."
+   VITE_FIREBASE_AUTH_DOMAIN="..."
+   # ...etc
+   PHONEPE_MERCHANT_ID="..."
+   PHONEPE_SALT_KEY="..."
+   ```
+4. **Boot Development Server:**
+   ```bash
+   npm run dev
+   ```
+
+---
+*Built intricately with modern reactive patterns and robust backend security.*
