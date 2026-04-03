@@ -93,3 +93,36 @@ export const updateUserPlan = async (userId, planConfig) => {
     throw error;
   }
 };
+
+// ------------- BROADCASTS -------------
+
+export const addBroadcast = async (message) => {
+  try {
+    const docRef = await addDoc(collection(db, 'Broadcasts'), {
+      message,
+      created_at: serverTimestamp(),
+    });
+    return docRef.id;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteBroadcast = async (broadcastId) => {
+  try {
+    const broadcastRef = doc(db, 'Broadcasts', broadcastId);
+    await deleteDoc(broadcastRef);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getBroadcasts = async () => {
+  try {
+    const q = query(collection(db, 'Broadcasts'), orderBy('created_at', 'desc'));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    throw error;
+  }
+};

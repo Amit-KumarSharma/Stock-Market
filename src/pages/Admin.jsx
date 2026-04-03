@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getCalls, addCall, updateCallStatus, deleteCall, getPlans, addPlan, updatePlan } from '../firebase/db';
+import { getCalls, addCall, updateCallStatus, deleteCall, getPlans, addPlan, updatePlan, addBroadcast, getBroadcasts, deleteBroadcast } from '../firebase/db';
 import toast from 'react-hot-toast';
 import { Plus, Trash2, Edit2 } from 'lucide-react';
 
@@ -21,6 +21,10 @@ const Admin = () => {
     plan_name: '', price: '', duration: ''
   });
 
+  // States for Broadcasts
+  const [broadcasts, setBroadcasts] = useState([]);
+  const [broadcastMessage, setBroadcastMessage] = useState('');
+
   useEffect(() => {
     fetchData();
   }, [activeTab]);
@@ -30,9 +34,12 @@ const Admin = () => {
       if (activeTab === 'calls') {
         const d = await getCalls();
         setCalls(d);
-      } else {
+      } else if (activeTab === 'plans') {
         const p = await getPlans();
         setPlans(p);
+      } else if (activeTab === 'broadcasts') {
+        const b = await getBroadcasts();
+        setBroadcasts(b);
       }
     } catch (error) {
       toast.error('Failed to fetch data');
@@ -98,6 +105,30 @@ const Admin = () => {
     }
   };
 
+  const handleBroadcastSubmit = async (e) => {
+    e.preventDefault();
+    if(!broadcastMessage.trim()) return;
+    try {
+      await addBroadcast(broadcastMessage);
+      toast.success('Broadcast sent instantly!');
+      setBroadcastMessage('');
+      fetchData();
+    } catch (error) {
+      toast.error('Failed to send broadcast');
+    }
+  };
+
+  const handleDeleteBroadcast = async (id) => {
+    if(!window.confirm("Remove this broadcast from all users?")) return;
+    try {
+      await deleteBroadcast(id);
+      toast.success('Broadcast removed');
+      fetchData();
+    } catch(err) {
+      toast.error('Could not delete broadcast');
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
       <h1 className="text-4xl font-display font-bold mb-8 text-primary">Admin Control Panel</h1>
@@ -115,6 +146,12 @@ const Admin = () => {
           className={`px-6 py-2 rounded-lg font-medium transition ${activeTab === 'plans' ? 'bg-primary text-white' : 'bg-white/10 text-gray-400'}`}
         >
           Manage Plans
+        </button>
+        <button 
+          onClick={() => setActiveTab('broadcasts')}
+          className={`px-6 py-2 rounded-lg text-danger font-medium transition ${activeTab === 'broadcasts' ? 'bg-danger/20 border border-danger/50 text-danger' : 'bg-white/10 text-gray-400'}`}
+        >
+          Emergency Broadcast
         </button>
       </div>
 
@@ -232,6 +269,48 @@ const Admin = () => {
                     Toggle Activity
                   </button>
                 </div>
+               </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'broadcasts' && (
+        <div className="grid lg:grid-cols-3 gap-8">
+           <div className="lg:col-span-1 glass-card p-6 border-danger/50 bg-danger/10 h-fit">
+            <h2 className="text-xl font-bold mb-4 border-b border-danger/30 pb-2 text-danger">Send Global Alert</h2>
+            <p className="text-sm text-gray-300 mb-4">This message will instantly appear on the dashboards of all users.</p>
+            <form onSubmit={handleBroadcastSubmit} className="space-y-4">
+              <div>
+                <label className="block text-xs uppercase text-danger mb-1">Message</label>
+                <textarea 
+                  required 
+                  value={broadcastMessage} 
+                  onChange={e => setBroadcastMessage(e.target.value)} 
+                  className="w-full bg-dark border border-danger/30 rounded-lg px-3 py-2 text-white h-24" 
+                  placeholder="E.g. Market crashing! Close all intraday positions immediately!" 
+                />
+              </div>
+              <button type="submit" className="w-full bg-danger hover:bg-danger/80 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 mt-4">
+                Push Alert
+              </button>
+            </form>
+          </div>
+
+          <div className="lg:col-span-2 space-y-4">
+            <h2 className="text-xl font-bold mb-4">Active & Past Broadcasts</h2>
+            {broadcasts.length === 0 && <p className="text-gray-400">No broadcasts found.</p>}
+            {broadcasts.map(b => (
+               <div key={b.id} className="bg-white/5 border border-white/10 rounded-xl p-4 flex justify-between items-start gap-4">
+                 <div>
+                   <p className="font-medium text-lg">{b.message}</p>
+                   <p className="text-xs text-gray-500 mt-2">
+                     {b.created_at ? new Date(b.created_at.seconds * 1000).toLocaleString() : 'Just now'}
+                   </p>
+                 </div>
+                 <button onClick={() => handleDeleteBroadcast(b.id)} className="text-gray-400 hover:text-danger">
+                    <Trash2 className="w-5 h-5" />
+                 </button>
                </div>
             ))}
           </div>

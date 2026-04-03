@@ -31,6 +31,16 @@ const CallCard = ({ call, onUpgrade }) => {
     return status.replace('_', ' ').toUpperCase();
   };
 
+  const formatTime = (timestamp) => {
+    if (!timestamp) return 'Just now';
+    try {
+      const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp.seconds * 1000);
+      return date.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    } catch(e) {
+      return 'Recent';
+    }
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -40,7 +50,10 @@ const CallCard = ({ call, onUpgrade }) => {
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-xl font-display font-bold">{call.asset_name}</h3>
-          <p className="text-sm text-gray-400 uppercase tracking-wider">{call.category}</p>
+          <div className="flex items-center gap-3 mt-1">
+             <p className="text-sm text-gray-400 uppercase tracking-wider">{call.category}</p>
+             <p className="text-xs text-gray-500 flex items-center gap-1"><Clock className="w-3 h-3" /> {formatTime(call.created_at)}</p>
+          </div>
         </div>
         <div className={`px-3 py-1 rounded-full border text-xs font-medium flex items-center gap-1 ${getStatusColor(call.status)}`}>
           {getStatusIcon(call.status)}
