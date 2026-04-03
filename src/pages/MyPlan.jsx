@@ -79,8 +79,9 @@ const MyPlan = () => {
         toast.error('Gateway failed to provide a checkout URL', { id: loadingToast });
       }
     } catch (error) {
-      console.error(error);
-      toast.error('Could not connect to payment server', { id: loadingToast });
+      console.error("Payment API Error:", error.response?.data || error.message);
+      const serverError = error.response?.data?.error || 'Could not connect to payment server';
+      toast.error(serverError, { id: loadingToast });
     }
   };
 

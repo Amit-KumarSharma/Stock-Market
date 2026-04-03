@@ -11,8 +11,8 @@ export default async function handler(req, res) {
   const SALT_KEY = process.env.PHONEPE_SALT_KEY || '099eb0cd-02cf-4e2a-8aca-3e6c6aff0399';
   const SALT_INDEX = process.env.PHONEPE_SALT_INDEX || '1';
   
-  // Sandbox testing endpoint. Use api.phonepe.com/events/v2 for prod
-  const PHONEPE_URL = 'https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay';
+  // Sandbox testing endpoint. Use api.phonepe.com/apis/hermes/pg/v1/pay for prod
+  const PHONEPE_URL = 'https://api-preprod.phonepe.com/apis/hermes/pg/v1/pay';
 
   const transactionId = `T${Date.now()}`;
   

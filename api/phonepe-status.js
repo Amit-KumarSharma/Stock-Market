@@ -21,7 +21,7 @@ export default async function handler(req, res) {
   const checksum = sha256 + "###" + SALT_INDEX;
 
   try {
-    const response = await fetch(`https://api-preprod.phonepe.com/apis/pg-sandbox${endpoint}`, {
+    const response = await fetch(`https://api-preprod.phonepe.com/apis/hermes${endpoint}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
