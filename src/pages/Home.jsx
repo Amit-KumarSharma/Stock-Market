@@ -103,36 +103,35 @@ const Home = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 w-full flex items-center justify-center lg:justify-between max-w-7xl mx-auto px-6 py-12">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-12 flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-12">
         
-        {/* Left Side: Hero Text */}
+        {/* Hero Text Section */}
         <motion.div 
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
-          className="hidden lg:block w-1/2"
+          className="w-full lg:w-1/2 text-center lg:text-left"
         >
-          <h1 className="text-6xl font-display font-bold leading-tight mb-6">
-            Master the Market with <br />
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold leading-tight mb-6">
+            Master the Market with <br className="hidden md:block" />
             <span className="text-gradient">Precision Signals</span>
           </h1>
-          <p className="text-xl text-gray-400 mb-8 max-w-lg">
+          <p className="text-lg text-gray-400 mb-8 max-w-lg mx-auto lg:mx-0">
             Get exclusive access to high-accuracy equity, options, and crypto trading setups. Join the elite group of profitable traders today.
           </p>
-          <div className="flex gap-4 mb-4">
-            <div className="glass px-6 py-4 rounded-xl flex flex-col">
+          <div className="flex justify-center lg:justify-start gap-4 mb-4">
+            <div className="glass px-6 py-4 rounded-xl flex flex-col min-w-[100px]">
               <span className="text-2xl font-bold text-white">92%</span>
               <span className="text-sm text-gray-400">Win Rate</span>
             </div>
-            <div className="glass px-6 py-4 rounded-xl flex flex-col">
+            <div className="glass px-6 py-4 rounded-xl flex flex-col min-w-[100px]">
               <span className="text-2xl font-bold text-accent">24/7</span>
-              <span className="text-sm text-gray-400">Market Coverage</span>
+              <span className="text-sm text-gray-400">Analysis</span>
             </div>
           </div>
-
         </motion.div>
 
-        {/* Right Side: Auth Form */}
+        {/* Auth Form Section */}
         <motion.div 
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
