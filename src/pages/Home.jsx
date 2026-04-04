@@ -92,13 +92,13 @@ const Home = () => {
   return (
     <div className="relative w-full min-h-[calc(100vh-4rem)] bg-darker flex flex-col justify-center">
       {/* 3D Background */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <Canvas camera={{ position: [0, 0, 5] }}>
+      <div className="absolute top-0 left-0 w-full h-full z-0 overflow-hidden pointer-events-none">
+        <Canvas camera={{ position: [0, 0, 5] }} dpr={[1, 2]}>
           <ambientLight intensity={0.5} />
           <directionalLight position={[10, 10, 10]} intensity={1} />
           <AnimatedSphere />
-          <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-          <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.5} />
+          <Stars radius={100} depth={50} count={2000} factor={4} saturation={0} fade speed={1} />
+          <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.5} />
         </Canvas>
       </div>
 
