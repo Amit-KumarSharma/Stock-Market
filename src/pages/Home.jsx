@@ -90,9 +90,9 @@ const Home = () => {
   };
 
   return (
-    <div className="relative w-full h-[calc(100vh-4rem)] bg-darker overflow-hidden">
+    <div className="relative w-full min-h-[calc(100vh-4rem)] bg-darker flex flex-col justify-center">
       {/* 3D Background */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <Canvas camera={{ position: [0, 0, 5] }}>
           <ambientLight intensity={0.5} />
           <directionalLight position={[10, 10, 10]} intensity={1} />
@@ -103,7 +103,7 @@ const Home = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 w-full h-full flex items-center justify-center lg:justify-between max-w-7xl mx-auto px-6">
+      <div className="relative z-10 w-full flex items-center justify-center lg:justify-between max-w-7xl mx-auto px-6 py-12">
         
         {/* Left Side: Hero Text */}
         <motion.div 
