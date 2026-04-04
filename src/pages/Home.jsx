@@ -38,8 +38,24 @@ const Home = () => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
+  const [starSize, setStarSize] = useState(6);
   const navigate = useNavigate();
   const { user } = useAuth();
+
+  useEffect(() => {
+    const handleResize = () => {
+      // In Desktop view (>= 1024px), make stars much larger as requested
+      if (window.innerWidth >= 1024) {
+        setStarSize(12); 
+      } else {
+        setStarSize(6);
+      }
+    };
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // If already logged in, you might want to redirect, but let's keep it simple.
   if (user) {
@@ -97,7 +113,7 @@ const Home = () => {
           <ambientLight intensity={0.5} />
           <directionalLight position={[10, 10, 10]} intensity={1} />
           <AnimatedSphere />
-          <Stars radius={100} depth={50} count={5000} factor={6} saturation={0} fade speed={1} />
+          <Stars radius={100} depth={50} count={5000} factor={starSize} saturation={0} fade speed={1} />
           <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.5} />
         </Canvas>
       </div>
