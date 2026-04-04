@@ -97,7 +97,7 @@ const Home = () => {
           <ambientLight intensity={0.5} />
           <directionalLight position={[10, 10, 10]} intensity={1} />
           <AnimatedSphere />
-          <Stars radius={100} depth={50} count={2000} factor={4} saturation={0} fade speed={1} />
+          <Stars radius={100} depth={50} count={5000} factor={6} saturation={0} fade speed={1} />
           <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.5} />
         </Canvas>
       </div>
