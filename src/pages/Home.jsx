@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Sphere, MeshDistortMaterial, Stars } from '@react-three/drei';
-import { loginUser, registerUser, loginWithGoogle } from '../firebase/auth';
+import { loginUser, registerUser, loginWithGoogle, resetUserPassword } from '../firebase/auth';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import { LogIn, UserPlus } from 'lucide-react';
@@ -36,6 +36,7 @@ const Home = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -53,7 +54,7 @@ const Home = () => {
         await loginUser(email, password);
         toast.success("Welcome back!");
       } else {
-        await registerUser(name, email, password);
+        await registerUser(name, phone, email, password);
         toast.success("Account created successfully!");
       }
       navigate('/dashboard');
@@ -71,6 +72,20 @@ const Home = () => {
       navigate('/dashboard');
     } catch (error) {
       toast.error(error.message);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!email) {
+      toast.error("Please enter your email address first");
+      return;
+    }
+    const toastId = toast.loading('Sending reset email...');
+    try {
+      await resetUserPassword(email);
+      toast.success('Password reset link sent to your email!', { id: toastId });
+    } catch (error) {
+      toast.error(error.message, { id: toastId });
     }
   };
 
@@ -134,17 +149,30 @@ const Home = () => {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               {!isLogin && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">Full Name</label>
-                  <input 
-                    type="text" 
-                    required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors"
-                    placeholder="John Doe"
-                  />
-                </div>
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-1">Full Name</label>
+                    <input 
+                      type="text" 
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors"
+                      placeholder="John Doe"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-1">Phone Number</label>
+                    <input 
+                      type="tel" 
+                      required
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors"
+                      placeholder="+91 9999999999"
+                    />
+                  </div>
+                </>
               )}
               <div>
                 <label className="block text-sm font-medium text-gray-400 mb-1">Email Address</label>
@@ -168,6 +196,18 @@ const Home = () => {
                   placeholder="••••••••"
                 />
               </div>
+
+              {isLogin && (
+                <div className="flex justify-end mt-1">
+                  <button 
+                    type="button" 
+                    onClick={handleForgotPassword}
+                    className="text-sm font-medium text-gray-400 hover:text-accent transition-colors"
+                  >
+                    Forgot Password?
+                  </button>
+                </div>
+              )}
 
               <button 
                 type="submit" 

@@ -3,7 +3,8 @@ import {
   signInWithEmailAndPassword, 
   signOut, 
   GoogleAuthProvider, 
-  signInWithPopup 
+  signInWithPopup,
+  sendPasswordResetEmail
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from './config';
@@ -11,7 +12,7 @@ import { auth, db } from './config';
 const googleProvider = new GoogleAuthProvider();
 
 // Sign Up
-export const registerUser = async (name, email, password) => {
+export const registerUser = async (name, phone, email, password) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
@@ -19,6 +20,7 @@ export const registerUser = async (name, email, password) => {
     // Create user document in Firestore
     await setDoc(doc(db, 'Users', user.uid), {
       name,
+      phone,
       email,
       role: 'user',
       plan_type: null,
@@ -56,6 +58,7 @@ export const loginWithGoogle = async () => {
       await setDoc(userDocRef, {
         name: user.displayName,
         email: user.email,
+        phone: null,
         role: 'user',
         plan_type: null,
         plan_expiry: null
@@ -72,6 +75,15 @@ export const loginWithGoogle = async () => {
 export const logoutUser = async () => {
   try {
     await signOut(auth);
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Reset Password
+export const resetUserPassword = async (email) => {
+  try {
+    await sendPasswordResetEmail(auth, email);
   } catch (error) {
     throw error;
   }
